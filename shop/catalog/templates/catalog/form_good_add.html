@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% block content%}
+<form method="post" action="{% url 'add_good' %}">
+<div class="mb-3">
+  <label  class="form-label">Название товара</label>
+  <input type="text" class="form-control form-control-lg" placeholder="jeans">
+</div>
+  <div class="mb-3">
+  <label class="form-label">Цена</label>
+  <input type="text" class="form-control form-control-lg" placeholder="5.66">
+</div>
+  <div class="mb-3">
+  <label  class="form-label">Размер</label>
+  <input type="text" class="form-control form-control-lg" placeholder="52">
+</div>
+
+    <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3">Добавить</button>
+  </div>
+
+
+</form>
+{% endblock %}

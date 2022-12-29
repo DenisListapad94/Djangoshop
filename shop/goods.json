@@ -1,0 +1,8 @@
+[
+  {"name_good": "short", "cost": 30.23, "size": "XXL" },
+  {"name_good": "belt", "cost": 10.25, "size": "100" },
+  {"name_good": "sockers", "cost": 130.23, "size": "44" },
+  {"name_good": "jeans", "cost": 60.55, "size": "54" },
+  {"name_good": "sweater", "cost": 89.23, "size": "XL" },
+  {"name_good": "trousers", "cost": 56.21, "size": "52" }
+]

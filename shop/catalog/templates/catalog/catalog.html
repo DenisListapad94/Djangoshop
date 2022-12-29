@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% block content%}
+
+<h3>Все товары</h3>
+<table class="table-success table table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Наименование</th>
+      <th scope="col">цена</th>
+      <th scope="col">размер</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for good in goods %}
+    <tr>
+      <td>{{good.name_good}}</td>
+      <td>{{good.cost}}</td>
+      <td>{{good.size}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
