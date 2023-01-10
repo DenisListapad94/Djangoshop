@@ -1,19 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
+from .models import *
 import json
 
-
-# goods = {
-#     "jeans": 56.23,
-#     "belt": 10.26,
-#     "short": 9.12
-# }
-
-
-# menu = [{'url': "index", "field": 'Главная'},
-#         {'url': "main", "field": 'все товары'},
-# ]
 
 def main(request):
     url = reverse(catalog)
@@ -22,9 +12,8 @@ def main(request):
 
 def catalog(request):
     url = reverse(main)
-    with open("goods.json", 'r') as goods_json:
-        goods = json.load(goods_json)
-    return render(request, 'catalog.html', {"goods": goods, 'url': url})
+    clothes = Clothes.objects.all()
+    return render(request, 'catalog.html', {"clothes": clothes, 'url': url})
 
 
 def all_goods(request, good, adik):
@@ -33,5 +22,5 @@ def all_goods(request, good, adik):
 
 def add_good(request):
     if request.method == 'POST':
-        print(request.POST)
+        return redirect('/goods/main')
     return render(request, 'form_good_add.html')

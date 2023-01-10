@@ -8,14 +8,16 @@
       <th scope="col">Наименование</th>
       <th scope="col">цена</th>
       <th scope="col">размер</th>
+      <th scope="col">цвет</th>
     </tr>
   </thead>
   <tbody>
-    {% for good in goods %}
+    {% for cl in clothes %}
     <tr>
-      <td>{{good.name_good}}</td>
-      <td>{{good.cost}}</td>
-      <td>{{good.size}}</td>
+      <td>{{cl.name}}</td>
+      <td>{{cl.price}}</td>
+      <td>{{cl.size}}</td>
+      <td>{{cl.color}}</td>
     </tr>
     {% endfor %}
   </tbody>
