@@ -1,15 +1,39 @@
 from django.db import models
 
 
-class Dress_style(models.Model):
-    title_style = models.CharField(max_length=100)
+class Users(models.Model):
+    name = models.CharField(max_length=100, verbose_name='имя')
+    surname = models.CharField(max_length=100, verbose_name='фамилия')
+    age = models.IntegerField(verbose_name='возраст')
+    phone = models.CharField(max_length=50, verbose_name='телефон')
+    adress = models.CharField(max_length=50, verbose_name='адрес')
 
     def __str__(self):
-        return self.title_style
+        return self.name
 
     class Meta:
-        verbose_name_plural = 'Стиль'
+        verbose_name_plural = 'Пользователи'
 
+
+class Shop(models.Model):
+    adress = models.CharField(max_length=50, verbose_name='адрес')
+    phone = models.CharField(max_length=50, verbose_name='телефон')
+    main_manager = models.CharField(max_length=50, verbose_name='Главный менеджер')
+
+    clothes = models.ManyToManyField('Clothes')
+
+    class Meta:
+        verbose_name_plural = 'Магазины'
+
+
+class Orders(models.Model):
+    order_date = models.DateTimeField()
+    user = models.ForeignKey('Users', on_delete=models.CASCADE, null=True)
+    shop = models.ForeignKey('Shop', on_delete=models.CASCADE, null=True)
+
+    clothes = models.ManyToManyField('Clothes')
+    class Meta:
+        verbose_name_plural = 'Заказы'
 
 class Clothes(models.Model):
     name = models.CharField(max_length=100, verbose_name='название')
@@ -17,7 +41,7 @@ class Clothes(models.Model):
     price = models.FloatField(null=True, verbose_name='цена')
     size = models.IntegerField(verbose_name='размер')
     color = models.CharField(max_length=100, null=True, verbose_name='цвет')
-    dress_style = models.ForeignKey('Dress_style', on_delete=models.CASCADE, null=True)
+
     article = models.OneToOneField('Article', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -27,10 +51,9 @@ class Clothes(models.Model):
         ordering = ["-price"]
         verbose_name_plural = 'Одежда'
 
-
 class Article(models.Model):
-    article = models.CharField(max_length=100)
-
+    article = models.IntegerField(verbose_name='артикль')
+    serial_number = models.CharField(max_length=50,verbose_name='серийный номер')
     def __str__(self):
         return self.article
 

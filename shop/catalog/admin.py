@@ -3,8 +3,8 @@ from .models import *
 
 
 class ClothesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'size', 'dress_style')
-    list_display_links = ('name','dress_style')
+    list_display = ('name', 'price', 'size')
+    list_display_links = ('name',)
     search_fields = ('name', 'price')
     list_editable = ('price', 'size')
     list_filter = ('name', 'price', 'size')
@@ -14,16 +14,32 @@ class ClothesAdmin(admin.ModelAdmin):
 admin.site.register(Clothes, ClothesAdmin)
 
 
-class DressStyleAdmin(admin.ModelAdmin):
-    list_display = ('title_style',)
-    list_display_links = ('title_style',)
+class UsersAdmin(admin.ModelAdmin):
+    list_display = ('name', 'surname', 'age', 'adress')
+    list_display_links = ('name', 'surname')
 
 
-admin.site.register(Dress_style, DressStyleAdmin)
+admin.site.register(Users, UsersAdmin)
+
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('article',)
+    list_display = ('article', 'serial_number')
     list_display_links = ('article',)
 
 
 admin.site.register(Article, ArticleAdmin)
+
+
+class OrdersAdmin(admin.ModelAdmin):
+    list_display = ('user','shop','order_date')
+    list_display_links = ('user',)
+
+
+admin.site.register(Orders, OrdersAdmin)
+
+class ShopAdmin(admin.ModelAdmin):
+    list_display = ('main_manager', 'phone')
+    list_display_links = ('main_manager',)
+
+
+admin.site.register(Shop, ShopAdmin)
