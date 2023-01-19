@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% block content%}
+
+<h3>Все товары</h3>
+<table class="table-success table table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">имя</th>
+      <th scope="col">фамилия</th>
+      <th scope="col">возраст</th>
+      <th scope="col">телефон</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for us in users %}
+    <tr>
+      <td>{{us.name}}</td>
+      <td>{{us.surname}}</td>
+      <td>{{us.age}}</td>
+      <td>{{us.phone}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

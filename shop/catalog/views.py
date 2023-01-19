@@ -22,11 +22,25 @@ def all_goods(request, good, adik):
 
 def add_good(request):
     if request.method == 'POST':
-        ar = Article.objects.create(article = request.POST['article'],serial_number='mc')
+        ar = Article.objects.create(article=request.POST['article'], serial_number='mc')
         Clothes.objects.create(name=request.POST['name'],
                                price=request.POST['price'],
                                size=request.POST['size'],
                                color=request.POST['color'],
-                               article = ar)
+                               article=ar)
         redirect('/goods/main')
     return render(request, 'form_good_add.html')
+
+
+def all_users(request):
+    users = Users.objects.filter(name='Sarah')
+    context = {
+        "users": users
+    }
+    return render(request, 'all_users.html', context=context)
+def shops(request):
+    shops = Shop.objects.all()
+    context = {
+        "shops": shops
+    }
+    return render(request, 'shops.html', context=context)

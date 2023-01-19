@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class Users(models.Model):
@@ -13,6 +14,10 @@ class Users(models.Model):
 
     class Meta:
         verbose_name_plural = 'Пользователи'
+        indexes = [
+            models.Index(fields=['name'], name='name_idx'),
+            models.Index(Lower('adress').desc(), 'name', name='lower_adress_name_idx')
+        ]
 
 
 class Shop(models.Model):

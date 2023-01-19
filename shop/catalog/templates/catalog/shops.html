@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+{% block content%}
+
+<h3>Все магазины</h3>
+<table class="table-success table table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">адрес</th>
+      <th scope="col">телефон</th>
+      <th scope="col">менеджер</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for shop in shops %}
+    <tr>
+      <td>{{shop.adress}}
+      (
+      {% for cl in shop.clothes.all %}
+          {{cl}}
+       {% endfor %}
+      )
+      </td>
+      <td>{{shop.phone}}</td>
+      <td>{{shop.main_manager}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
