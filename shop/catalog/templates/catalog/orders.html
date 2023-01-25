@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+{% block content%}
+
+<h3>Все магазины</h3>
+<table class="table-success table table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Имя Фамилия</th>
+      <th scope="col">Заказ</th>
+      <th scope="col">дата</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for order in orders %}
+        <tr>
+        <td>{{order.user.name}} {{order.user.surname}}</td>
+        <td>
+            {% for cl in order.clothes.all %}
+                {{cl.name }}
+            {% endfor %}
+        </td>
+        <td>{{order.order_date}}</td>
+        </tr>
+    {% endfor %}
+
+
+  </tbody>
+</table>
+{% endblock %}

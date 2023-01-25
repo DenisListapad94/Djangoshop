@@ -13,17 +13,35 @@ class Users(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Пользователи'
-        indexes = [
-            models.Index(fields=['name'], name='name_idx'),
-            models.Index(Lower('adress').desc(), 'name', name='lower_adress_name_idx')
-        ]
+        # verbose_name_plural = 'Пользователи'
+        abstract = True
+        # indexes = [
+        #     models.Index(fields=['name'], name='name_idx'),
+        #     models.Index(Lower('adress').desc(), 'name', name='lower_adress_name_idx')
+        # ]
+
+
+class Managers(Users):
+    experiences = models.IntegerField(verbose_name='стаж', null=True)
+    level_access = models.IntegerField(verbose_name='уровень допуска', null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Costumers(Users):
+    discont_card = models.IntegerField(verbose_name='скидка', null=True)
+    orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
+    # def __str__(self):
+    #     return self.name
 
 
 class Shop(models.Model):
     adress = models.CharField(max_length=50, verbose_name='адрес')
     phone = models.CharField(max_length=50, verbose_name='телефон')
-    main_manager = models.CharField(max_length=50, verbose_name='Главный менеджер')
+
+    orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
+    managers = models.ForeignKey('Managers', on_delete=models.CASCADE, null=True)
 
     clothes = models.ManyToManyField('Clothes')
 
@@ -32,13 +50,30 @@ class Shop(models.Model):
 
 
 class Orders(models.Model):
-    order_date = models.DateTimeField()
-    user = models.ForeignKey('Users', on_delete=models.CASCADE, null=True)
-    shop = models.ForeignKey('Shop', on_delete=models.CASCADE, null=True)
-
+    order_date = models.DateTimeField(null=True)
     clothes = models.ManyToManyField('Clothes')
+
     class Meta:
         verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f"{self.order_date}"
+
+
+class Delivery_orders(Orders):
+    adress = models.CharField(max_length=100, verbose_name='aдрес доставки')
+    comment = models.TextField(verbose_name="комментарий к заказу")
+
+    def __str__(self):
+        return self.adress
+
+
+class Take_away_orders(Orders):
+    comment = models.TextField(verbose_name="комментарий к заказу")
+
+    def __str__(self):
+        return self.shop
+
 
 class Clothes(models.Model):
     name = models.CharField(max_length=100, verbose_name='название')
@@ -46,19 +81,20 @@ class Clothes(models.Model):
     price = models.FloatField(null=True, verbose_name='цена')
     size = models.IntegerField(verbose_name='размер')
     color = models.CharField(max_length=100, null=True, verbose_name='цвет')
-
+    category = models.IntegerField(verbose_name='категория')
     article = models.OneToOneField('Article', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ["-price"]
         verbose_name_plural = 'Одежда'
+
 
 class Article(models.Model):
     article = models.IntegerField(verbose_name='артикль')
-    serial_number = models.CharField(max_length=50,verbose_name='серийный номер')
+    serial_number = models.CharField(max_length=50, verbose_name='серийный номер')
+
     def __str__(self):
         return self.article
 
