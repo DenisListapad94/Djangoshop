@@ -8,5 +8,6 @@ urlpatterns = [
     path('goods/<int:good>/<str:adik>',all_goods),
     path('add_good/',add_good, name='add_good'),
     path('all_users/',all_users, name='all_users'),
-    path('shops/',shops, name='shops')
+    path('shops/',shops, name='shops'),
+    # path('balance_view/',balance_view, name='balance_view')
 ]

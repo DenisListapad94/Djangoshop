@@ -15,8 +15,9 @@ admin.site.register(Clothes, ClothesAdmin)
 
 
 class CostumersAdmin(admin.ModelAdmin):
-    list_display = ('name', 'surname', 'age', 'adress')
-    list_display_links = ('name', 'surname')
+    list_display = ('name', 'age', 'adress','balance')
+    list_display_links = ('name',)
+    ordering = ('id',)
 
 
 admin.site.register(Costumers, CostumersAdmin)
@@ -47,7 +48,7 @@ admin.site.register(Orders, OrdersAdmin)
 
 
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ('adress', 'phone')
+    list_display = ('adress', 'phone','balance')
     list_display_links = ('adress',)
 
 

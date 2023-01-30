@@ -1,6 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
 from django.db.models.functions import Lower
-
 
 class Users(models.Model):
     name = models.CharField(max_length=100, verbose_name='имя')
@@ -8,7 +8,6 @@ class Users(models.Model):
     age = models.IntegerField(verbose_name='возраст')
     phone = models.CharField(max_length=50, verbose_name='телефон')
     adress = models.CharField(max_length=50, verbose_name='адрес')
-
     def __str__(self):
         return self.name
 
@@ -20,7 +19,6 @@ class Users(models.Model):
         #     models.Index(Lower('adress').desc(), 'name', name='lower_adress_name_idx')
         # ]
 
-
 class Managers(Users):
     experiences = models.IntegerField(verbose_name='стаж', null=True)
     level_access = models.IntegerField(verbose_name='уровень допуска', null=True)
@@ -28,17 +26,17 @@ class Managers(Users):
     def __str__(self):
         return self.name
 
-
 class Costumers(Users):
     discont_card = models.IntegerField(verbose_name='скидка', null=True)
     orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
+    balance = models.FloatField(verbose_name='баланс', default=1000)
     # def __str__(self):
     #     return self.name
-
 
 class Shop(models.Model):
     adress = models.CharField(max_length=50, verbose_name='адрес')
     phone = models.CharField(max_length=50, verbose_name='телефон')
+    balance = models.FloatField(verbose_name='баланс', default=100000)
 
     orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
     managers = models.ForeignKey('Managers', on_delete=models.CASCADE, null=True)
@@ -48,6 +46,8 @@ class Shop(models.Model):
     class Meta:
         verbose_name_plural = 'Магазины'
 
+    def __str__(self):
+        return f"{self.adress}"
 
 class Orders(models.Model):
     order_date = models.DateTimeField(null=True)
@@ -92,7 +92,7 @@ class Clothes(models.Model):
 
 
 class Article(models.Model):
-    article = models.IntegerField(verbose_name='артикль')
+    article = models.IntegerField(verbose_name='артикул')
     serial_number = models.CharField(max_length=50, verbose_name='серийный номер')
 
     def __str__(self):
@@ -100,3 +100,13 @@ class Article(models.Model):
 
     class Meta:
         verbose_name_plural = 'Артикль'
+
+# def fun_receiver(sender,instance, created, **kwargs):
+#     print(instance,sender,created)
+#     if created:
+#         sender.article.article = 100000
+#         sender.article.serial_number = 'MK'
+#         sender.article.save()
+#
+#
+# post_save.connect(fun_receiver,sender=Clothes)
