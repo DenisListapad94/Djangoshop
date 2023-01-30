@@ -42,6 +42,7 @@ class Shop(models.Model):
     managers = models.ForeignKey('Managers', on_delete=models.CASCADE, null=True)
 
     clothes = models.ManyToManyField('Clothes')
+    feedback = models.ForeignKey('Feedback', on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name_plural = 'Магазины'
@@ -100,6 +101,13 @@ class Article(models.Model):
 
     class Meta:
         verbose_name_plural = 'Артикль'
+
+
+class Feedback(models.Model):
+    rating = models.IntegerField(verbose_name='рейтинг')
+    comment = models.TextField('комментарий')
+
+
 
 # def fun_receiver(sender,instance, created, **kwargs):
 #     print(instance,sender,created)
