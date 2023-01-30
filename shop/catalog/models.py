@@ -81,7 +81,7 @@ class Clothes(models.Model):
     price = models.FloatField(null=True, verbose_name='цена')
     size = models.IntegerField(verbose_name='размер')
     color = models.CharField(max_length=100, null=True, verbose_name='цвет')
-    category = models.IntegerField(verbose_name='категория')
+    category = models.IntegerField(verbose_name='категория', null=True)
     article = models.OneToOneField('Article', on_delete=models.CASCADE, null=True)
 
     def __str__(self):

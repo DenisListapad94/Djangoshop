@@ -25,7 +25,7 @@ def all_goods(request, good, adik):
 def add_good(request):
     if request.method == 'POST':
         print(request.POST)
-        ar = Article.objects.create(article=request.POST['article'], serial_number='mc')
+        # ar = Article.objects.create(article=request.POST['article'], serial_number='mc')
         Clothes.objects.create(name=request.POST['name'],
                                price=request.POST['price'],
                                size=request.POST['size'],
