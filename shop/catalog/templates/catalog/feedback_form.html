@@ -1,0 +1,39 @@
+{% extends 'base.html'%}
+{% block content%}
+    <form method="POST">
+    {% csrf_token %}
+    {{ form }}
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3">Добавить</button>
+  </div>
+    </form>
+{% endblock %}
+
+{#<div class="mb-3">#}
+{#  <label  class="form-label">Название товара</label>#}
+{#  <input type="text" class="form-control form-control-lg" placeholder="jeans" name="name">#}
+{#</div>#}
+{#  <div class="mb-3">#}
+{#  <label class="form-label">Цена</label>#}
+{#  <input type="text" class="form-control form-control-lg" placeholder="5.66" name="price">#}
+{#</div>#}
+{#  <div class="mb-3">#}
+{#  <label  class="form-label">Размер</label>#}
+{#  <input type="text" class="form-control form-control-lg" placeholder="52" name="size">#}
+{#</div>#}
+{#    <div class="mb-3">#}
+{#  <label  class="form-label">Цвет</label>#}
+{#  <input type="text" class="form-control form-control-lg" placeholder="blue" name="color">#}
+{#</div>#}
+
+{#    <div class="mb-3">#}
+{#  <label  class="form-label">Артикул</label>#}
+{#  <input type="text" class="form-control form-control-lg" placeholder="214121" name="article">#}
+{#</div>#}
+{##}
+{#    <div class="col-auto">#}
+{#    <button type="submit" class="btn btn-primary mb-3">Добавить</button>#}
+{#  </div>#}
+{##}
+{##}
+{#</form>#}

@@ -1,21 +1,64 @@
 from django.contrib import admin
 from .models import *
+from django.utils.safestring import mark_safe
+class ShopInline(admin.TabularInline):
+    model = Shop
 
+class OrderInline(admin.StackedInline):
+    model = Orders
+    extra = 1
 
+@admin.action(description='available clothes')
+def make_available(modeladmin, request, queryset):
+    queryset.update(status='a')
+@admin.register(Clothes)
 class ClothesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'size','article')
+    # fields = ['name', 'price', 'size', 'color','description','cheap_clothes']
+    # exclude = ('article',)
+
+    list_display = ('name', 'price', 'size', 'color','strike_clothes','cheap_clothes','status')
     list_display_links = ('name',)
-    search_fields = ('name', 'price')
-    list_editable = ('price', 'size')
-    list_filter = ('name', 'price', 'size')
-    # list_per_page = 3  # пагинация
+    list_filter = ('name', 'price')
+    search_fields = ('name', 'color')
+    readonly_fields = ('size','cheap_clothes')
+    list_per_page = 30
+    ordering = ('name', 'price')
+    save_on_top = True
+    fieldsets = (
+        (None, {
+            'fields': (('name', 'price'), 'size', 'color','cheap_clothes','status')
+        }),
+        ('Advanced options', {
+            # 'classes': ('collapse',),
+            'fields': ('description', 'category'),
+        }),
+    )
+    inlines = [
+        ShopInline,
+        OrderInline
+    ]
+    @admin.display(description='category clothes')
+    def cheap_clothes(self,object):
+        if object.price:
+            return 'cheap' if object.price < 100 else 'expensive'
+        else:
+            return 'sold'
 
+    def strike_clothes(self,object):
+        return mark_safe(f"<s>{object.name}</s>") if not object.price else object.name
 
-admin.site.register(Clothes, ClothesAdmin)
+    @admin.action(description='sold clothes')
+    def make_sold(self, request, queryset):
+        queryset.update(status='s')
+
+    actions = [make_available, make_sold]
+
+#
+# admin.site.register(Clothes, ClothesAdmin)
 
 
 class CostumersAdmin(admin.ModelAdmin):
-    list_display = ('name', 'age', 'adress','balance')
+    list_display = ('name', 'age', 'adress', 'balance')
     list_display_links = ('name',)
     ordering = ('id',)
 
@@ -48,7 +91,7 @@ admin.site.register(Orders, OrdersAdmin)
 
 
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ('adress', 'phone','balance')
+    list_display = ('adress', 'phone', 'balance')
     list_display_links = ('adress',)
 
 
