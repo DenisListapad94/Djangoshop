@@ -4,4 +4,7 @@ psycopg2-binary==2.9.5
 django_debug_toolbar==3.8.1
 crispy-bootstrap5==0.7
 django-crispy-forms==1.14.0
+Markdown==3.4.1
+djangorestframework==3.14.0
+django-filter==22.1
 

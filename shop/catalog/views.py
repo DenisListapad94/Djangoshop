@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
+from django.views import View
 
 from django.db import transaction
+from django.views.generic import TemplateView, DetailView
+from django.views.generic.list import ListView, BaseListView
+from django.views.generic.edit import CreateView
 
 from .models import *
 from .forms import *
@@ -36,6 +40,7 @@ def add_good(request):
         redirect('/goods/main')
     return render(request, 'form_good_add.html')
 
+
 def add_shop_form(request):
     context = {}
     if request.method == "POST":
@@ -47,6 +52,8 @@ def add_shop_form(request):
     else:
         context['form'] = ShopForm()
     return render(request, 'add_shop_form.html', context=context)
+
+
 def all_users(request):
     costumers = Costumers.objects.all()
     context = {
@@ -82,6 +89,48 @@ def order_all(request):
         "orders": orders
     }
     return render(request, 'orders.html', context=context)
+
+
+class MyView(ListView):
+    template_name = "home.html"
+    model = Shop
+    context_object_name = "shops"
+    # def get_queryset(self):
+    #     return Shop.objects.all()[:3]
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['shops'] = Shop
+    #     return context
+
+
+class ShopCreateView(CreateView):
+    template_name = "create_shop.html"
+    model = Shop
+    fields = ['adress', 'phone', 'balance']
+    success_url = reverse_lazy("my-view")
+
+class SerializersClothesMixin():
+    def serialize(self,clothes):
+        return {'id': clothes.id, "name": clothes.name}
+class ClothesListApiView(BaseListView,SerializersClothesMixin):
+    model = Clothes
+    context_object_name = 'clothes'
+
+    def render_to_response(self, context):
+        data = [self.serialize(clothes) for clothes in context['clothes'][:20]]
+        #data = [{'id': clothes.id, "name": clothes.name} for clothes in context['clothes'][:20]]
+        body = json.dumps(data)
+        return HttpResponse(body, content_type='application/json', status=200)
+class ClothesApiDetailView(DetailView,SerializersClothesMixin):
+    model = Clothes
+    context_object_name = 'clothes'
+
+    def render_to_response(self, context):
+        #data = {'id': context['clothes'].id, "name": context['clothes'].name}
+        data = self.serialize(context['clothes'])
+        body = json.dumps(data)
+        return HttpResponse(body, content_type='application/json', status=200)
 
 # @transaction.atomic
 # def balance_view(request):

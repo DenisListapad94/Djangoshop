@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.db.models.signals import post_save
 from django.db.models.functions import Lower
 
@@ -96,7 +97,7 @@ class Clothes(models.Model):
     color = models.CharField(max_length=100, null=True, verbose_name='цвет')
     category = models.IntegerField(verbose_name='категория', null=True)
     article = models.OneToOneField('Article', on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES,null=True)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, null=True)
 
     def __str__(self):
         return self.name
@@ -120,12 +121,10 @@ class Feedback(models.Model):
     rating = models.IntegerField(verbose_name='рейтинг')
     comment = models.TextField('комментарий')
 
-# def fun_receiver(sender,instance, created, **kwargs):
-#     print(instance,sender,created)
-#     if created:
-#         sender.article.article = 100000
-#         sender.article.serial_number = 'MK'
-#         sender.article.save()
-#
-#
-# post_save.connect(fun_receiver,sender=Clothes)
+
+def fun_receiver(sender, instance, created, **kwargs):
+    if instance.clothes.name:
+        instance.clothes.status = 's'
+        # cl = Clothes.objects.get(id=instance.clothes.id)
+        # cl.save()
+post_save.connect(fun_receiver, sender=Orders)
