@@ -43,6 +43,7 @@ class Shop(models.Model):
     adress = models.CharField(max_length=50, verbose_name='адрес')
     phone = models.CharField(max_length=50, verbose_name='телефон')
     balance = models.FloatField(verbose_name='баланс', default=100000)
+    photo = models.ImageField(upload_to='shop_photo', null=True)
 
     orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
     managers = models.ForeignKey('Managers', on_delete=models.CASCADE, null=True)
@@ -127,4 +128,6 @@ def fun_receiver(sender, instance, created, **kwargs):
         instance.clothes.status = 's'
         # cl = Clothes.objects.get(id=instance.clothes.id)
         # cl.save()
+
+
 post_save.connect(fun_receiver, sender=Orders)

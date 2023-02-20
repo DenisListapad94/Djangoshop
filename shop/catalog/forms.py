@@ -33,10 +33,11 @@ class FeedbackForm(forms.Form):
         )
     )
 
+
 class ShopForm(forms.ModelForm):
     class Meta:
         model = Shop
-        fields = ['adress', 'phone', 'balance', 'managers', 'clothes']
+        fields = ['adress', 'phone', 'balance', 'managers', 'clothes', 'photo']
         # exclude = ['orders']
         widgets = {
             # 'adress' : forms.Textarea()

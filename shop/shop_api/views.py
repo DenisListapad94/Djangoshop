@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from rest_framework import status, generics
+from rest_framework import status, generics, views
+from rest_framework.parsers import JSONParser,FileUploadParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import ClothesSerializer,ClothesModelSerializer
+from .serializers import *
 
-from catalog.models import Clothes
+from catalog.models import Clothes,Shop
 
 
 # class ClothesApiView(APIView):
@@ -27,3 +28,16 @@ class ClothesApiView(generics.ListCreateAPIView):
 class ClotheApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Clothes.objects.all()
     serializer_class = ClothesModelSerializer
+
+class ShopApiView(generics.ListCreateAPIView):
+    queryset = Shop.objects.all()
+    serializer_class = ShopModelSerializer
+
+class FileUploadView(views.APIView):
+    parser_classes = [FileUploadParser]
+    def put(self, request, pk, format=None):
+        file_obj = request.data['file']
+        obj = Shop.objects.get(pk=pk)
+        obj.photo = file_obj
+        obj.save()
+        return Response(status=204)

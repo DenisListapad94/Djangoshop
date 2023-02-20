@@ -7,4 +7,5 @@ django-crispy-forms==1.14.0
 Markdown==3.4.1
 djangorestframework==3.14.0
 django-filter==22.1
+Pillow==9.4.0
 

@@ -91,8 +91,11 @@ admin.site.register(Orders, OrdersAdmin)
 
 
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ('adress', 'phone', 'balance')
+    list_display = ('adress', 'phone', 'balance','get_html_photo')
     list_display_links = ('adress',)
+    def get_html_photo(self,object):
+        if object.photo:
+            return mark_safe(f"<img width=50 src={object.photo.url}/>")
 
-
+    get_html_photo.short_description = 'фото'
 admin.site.register(Shop, ShopAdmin)
