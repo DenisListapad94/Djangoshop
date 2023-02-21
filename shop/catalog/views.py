@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import permission_required
 from django.views import View
 
 from django.db import transaction
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView, BaseListView
 from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import PermissionRequiredMixin, AccessMixin
 
 from .models import *
 from .forms import *
@@ -40,7 +42,7 @@ def add_good(request):
         redirect('/goods/main')
     return render(request, 'form_good_add.html')
 
-
+@permission_required('catalog.add_shop',login_url='/admin/login/')
 def add_shop_form(request):
     context = {}
     if request.method == "POST":
@@ -74,7 +76,7 @@ def feedback_form(request):
         context['form'] = FeedbackForm()
     return render(request, 'feedback_form.html', context=context)
 
-
+@permission_required('catalog.view_shop',login_url='/admin/login/')
 def shops(request):
     shops = Shop.objects.all()
     context = {
@@ -90,8 +92,9 @@ def order_all(request):
     }
     return render(request, 'orders.html', context=context)
 
-
-class MyView(ListView):
+# @permission_required('catalog.view_shop',login_url='/admin/login')
+class MyView(ListView,PermissionRequiredMixin):
+    permission_required = 'catalog.view_shop'
     template_name = "home.html"
     model = Shop
     context_object_name = "shops"
