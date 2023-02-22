@@ -1,3 +1,7 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -42,7 +46,8 @@ def add_good(request):
         redirect('/goods/main')
     return render(request, 'form_good_add.html')
 
-@permission_required('catalog.add_shop',login_url='/admin/login/')
+
+@permission_required('catalog.add_shop', login_url='/admin/login/')
 def add_shop_form(request):
     context = {}
     if request.method == "POST":
@@ -76,7 +81,8 @@ def feedback_form(request):
         context['form'] = FeedbackForm()
     return render(request, 'feedback_form.html', context=context)
 
-@permission_required('catalog.view_shop',login_url='/admin/login/')
+
+@permission_required('catalog.view_shop', login_url='/admin/login/')
 def shops(request):
     shops = Shop.objects.all()
     context = {
@@ -92,8 +98,9 @@ def order_all(request):
     }
     return render(request, 'orders.html', context=context)
 
+
 # @permission_required('catalog.view_shop',login_url='/admin/login')
-class MyView(ListView,PermissionRequiredMixin):
+class MyView(ListView, PermissionRequiredMixin):
     permission_required = 'catalog.view_shop'
     template_name = "home.html"
     model = Shop
@@ -140,14 +147,29 @@ class ClothesApiDetailView(DetailView, SerializersClothesMixin):
         body = json.dumps(data)
         return HttpResponse(body, content_type='application/json', status=200)
 
-# @transaction.atomic
-# def balance_view(request):
-#     person = Costumers.objects.get(id=1)
-#     person.balance -= 50
-#     person.save()
-#
-#     raise ValueError
-#     shop = Shop.objects.get(adress='pulcino')
-#     shop.balance += 50
-#     shop.save()
-#     return HttpResponse('Потрачено')
+
+class RegisterUser(CreateView):
+    form_class = UserCreationForm
+    template_name = "register.html"
+    success_url = reverse_lazy("login")
+    def form_valid(self, form):
+        user = form.save()
+        user.is_staff = True
+        # perm = Permission.objects.get(codename='add_clothes')
+        # user.user_permissions.add(perm)
+        group_reg = Group.objects.get(name='reg_users')
+        user.groups.add(group_reg)
+        user.save()
+        login(self.request, user)
+        return redirect('catalog')
+class LoginUser(LoginView):
+    form_class = AuthenticationForm
+    template_name = "login.html"
+
+    def get_success_url(self):
+        return reverse_lazy("catalog")
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
