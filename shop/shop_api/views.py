@@ -24,8 +24,8 @@ from catalog.models import Clothes,Shop
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ClothesApiView(generics.ListCreateAPIView):
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Clothes.objects.all()
     serializer_class = ClothesModelSerializer
 

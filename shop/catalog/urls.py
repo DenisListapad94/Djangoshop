@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from .views import *
-
+from django.views.decorators.cache import cache_page
 urlpatterns = [
     path('main/', main, name='main'),
     path('orders/', order_all, name='orders'),
@@ -14,7 +14,7 @@ urlpatterns = [
     path('mine/', MyView.as_view(), name='my-view'),
     path('create_shop/', ShopCreateView.as_view(), name='create_shop'),
     path('api/clothes', ClothesListApiView.as_view(), name="clothes_api"),
-    re_path('api/clothes/(?P<pk>[\d-]+)', ClothesApiDetailView.as_view(), name='show_detail_api'),
+    re_path('api/clothes/(?P<pk>[\d-]+)', cache_page(60,cache='default')(ClothesApiDetailView.as_view()), name='show_detail_api'),
     path('register/', RegisterUser.as_view(), name='register'),
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/',logout_user,name='logout')
