@@ -4,6 +4,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -31,7 +32,12 @@ def main(request):
 def catalog(request):
     url = reverse(main)
     clothes = Clothes.objects.all()
-    return render(request, 'catalog.html', {"clothes": clothes, 'url': url})
+    paginator = Paginator(clothes, 20)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'catalog.html', {"clothes": clothes, 'url': url,'page_obj': page_obj})
 
 
 def all_goods(request, good, adik):
@@ -109,6 +115,7 @@ def order_all(request):
 
 # @permission_required('catalog.view_shop',login_url='/admin/login')
 class MyView(ListView, PermissionRequiredMixin):
+    paginate_by = 5
     permission_required = 'catalog.view_shop'
     template_name = "home.html"
     model = Shop
