@@ -131,3 +131,7 @@ def fun_receiver(sender, instance, created, **kwargs):
 
 
 post_save.connect(fun_receiver, sender=Orders)
+
+
+class Storage(models.Model):
+    value = models.CharField(max_length=100)

@@ -46,7 +46,6 @@ def all_goods(request, good, adik):
 
 def add_good(request):
     if request.method == 'POST':
-        print(request.POST)
         # ar = Article.objects.create(article=request.POST['article'], serial_number='mc')
         Clothes.objects.create(name=request.POST['name'],
                                price=request.POST['price'],
@@ -57,14 +56,14 @@ def add_good(request):
     return render(request, 'form_good_add.html')
 
 
-@permission_required('catalog.add_shop', login_url='/admin/login/')
+# @permission_required('catalog.add_shop', login_url='/admin/login/')
 def add_shop_form(request):
     context = {}
     if request.method == "POST":
         form = ShopForm(request.POST, request.FILES)
         if form.is_valid():
             shop = form.save()
-            caches['shop_cache'].clear()
+            # caches['shop_cache'].clear()
             return redirect('main')
         context['form'] = ShopForm(request.POST)
     else:
@@ -93,12 +92,10 @@ def feedback_form(request):
     return render(request, 'feedback_form.html', context=context)
 
 
-@permission_required('catalog.view_shop', login_url='/admin/login/')
-@cache_page(60, cache="shop_cache")
+# @permission_required('catalog.view_shop', login_url='/admin/login/')
+# @cache_page(60, cache="shop_cache")
 def shops(request):
-
     shops = Shop.objects.all()
-
     context = {
         "shops": shops
     }
