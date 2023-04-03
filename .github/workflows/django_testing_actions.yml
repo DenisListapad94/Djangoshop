@@ -2,7 +2,7 @@ name: django-shop
 on: workflow_dispatch
 jobs:
   copy_data:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest,linux]
     steps:
       - name: Copy data
         uses: actions/checkout@v3
