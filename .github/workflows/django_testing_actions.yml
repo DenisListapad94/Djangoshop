@@ -4,5 +4,7 @@ jobs:
   test_example:
     runs-on: ubuntu-latest
     steps:
-      - name: Start test
+      - name: First step test
         run: echo first test start
+      - name: Second step test
+        run: echo second test start
