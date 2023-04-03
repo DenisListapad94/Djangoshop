@@ -1,0 +1,18 @@
+name: django-shop
+on: workflow_dispatch
+jobs:
+  copy_data:
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Copy data
+        uses: actions/checkout@v3
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+      - name: Install dependences
+        run: pip install -r requirements.txt
