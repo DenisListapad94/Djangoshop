@@ -12,5 +12,15 @@ jobs:
           python-version: '3.10' 
       - name: Install dependences
         run: pip install -r requirements.txt
+        
+  information:
+    runs-on: ubuntu-latest
+    steps:
+    - name: info about job informations
+      run: |
+        echo info 1
+        echo info 2
+        echo info 3
+     
  
 
