@@ -2,7 +2,11 @@ name: django-shop
 on: workflow_dispatch
 jobs:
   copy_data:
-    runs-on: [ubuntu-latest,linux]
+    strategy:
+      matrix:
+        version: [10, 12, 14]
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Copy data
         uses: actions/checkout@v3
