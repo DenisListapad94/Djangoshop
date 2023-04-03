@@ -4,6 +4,6 @@ jobs:
   output:
     runs-on: ubuntu-latest
     steps:
-       -name: output console
+      - name: output console
         run: echo Hello GA!
        
