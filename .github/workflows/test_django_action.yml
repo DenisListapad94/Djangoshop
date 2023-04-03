@@ -6,4 +6,9 @@ jobs:
     steps:
       - name: output console
         run: echo Hello GA!
+      - name: output few files
+        run: |
+          echo first file
+          echo second file 
+          
        
