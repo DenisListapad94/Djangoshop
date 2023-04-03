@@ -1,7 +1,5 @@
 name: Django test action
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 jobs:  
   build:  
