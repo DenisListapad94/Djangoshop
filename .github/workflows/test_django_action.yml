@@ -7,7 +7,7 @@ jobs:
       - name: Create repository cod
         uses: actions/checkout@v3
       - name: Install python 
-        uses: actions/setuo-python@v3
+        uses: actions/setup-python@v3
       - name: Install dependences
         run: pip install -r requirements
       
