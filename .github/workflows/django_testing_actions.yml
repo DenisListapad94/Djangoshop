@@ -17,15 +17,6 @@ jobs:
       - name: Install dependences
         run: pip install -r requirements.txt
         
-  information:
-    runs-on: ubuntu-latest
-    needs: copy_data
-    steps:
-    - name: info about job informations
-      run: |
-        echo info 1
-        echo info 2
-        echo info 3
      
  
 
