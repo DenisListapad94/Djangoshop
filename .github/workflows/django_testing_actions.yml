@@ -1,10 +1,9 @@
 name: django-shop
 on: workflow_dispatch
 jobs:
-  test_example:
+  copy_data:
     runs-on: ubuntu-latest
     steps:
-      - name: First step test
-        run: echo first test start
-      - name: Second step test
-        run: echo second test start
+      - name: Copy data
+      - uses: actions/checkout@v3
+
