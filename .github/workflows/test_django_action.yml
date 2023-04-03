@@ -4,11 +4,12 @@ jobs:
   output:
     runs-on: ubuntu-latest
     steps:
-      - name: output console
-        run: echo Hello GA!
-      - name: output few files
-        run: |
-          echo first file
-          echo second file 
+      - name: Create repository cod
+        uses: actions/checkout@v3
+      - name: Install python 
+        uses: actions/setuo-python@v3
+      - name: Install dependences
+        run: pip install -r requirements
+      
           
        
