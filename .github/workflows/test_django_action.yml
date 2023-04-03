@@ -1,0 +1,9 @@
+name: Django CI
+on: workflow_dispatch
+jobs:
+  output:
+    runs-on: ubuntu-latest
+    steps:
+       -name: output console
+        run: echo Hello GA!
+       
