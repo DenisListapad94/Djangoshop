@@ -1,0 +1,8 @@
+name: django-shop
+on: workflow_dispatch
+jobs:
+  test_example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start test
+        run: echo first test start
