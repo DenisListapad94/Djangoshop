@@ -6,4 +6,6 @@ jobs:
     steps:
       - name: Copy data
       - uses: actions/checkout@v3
+      - name: End copy
+        run: echo finish copy
 
