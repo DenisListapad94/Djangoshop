@@ -1,3 +1,4 @@
+import base64
 import time
 
 from django.contrib.auth import logout, login
@@ -8,6 +9,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
+import requests
 from django.contrib.auth.decorators import permission_required
 from django.views import View
 
@@ -17,6 +19,7 @@ from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView, BaseListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import PermissionRequiredMixin, AccessMixin
+from django.core.files.base import ContentFile
 from django.core.cache import cache, caches
 
 from .models import *
@@ -37,7 +40,7 @@ def catalog(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'catalog.html', {"clothes": clothes, 'url': url,'page_obj': page_obj})
+    return render(request, 'catalog.html', {"clothes": clothes, 'url': url, 'page_obj': page_obj})
 
 
 def all_goods(request, good, adik):
@@ -62,7 +65,19 @@ def add_shop_form(request):
     if request.method == "POST":
         form = ShopForm(request.POST, request.FILES)
         if form.is_valid():
-            shop = form.save()
+            shop = Shop(adress=form.cleaned_data['adress'],
+                        phone=form.cleaned_data['phone']
+                        )
+            if 'photo' in form.files:
+                shop.photo = form.cleaned_data['photo']
+            else:
+                response = requests.post(
+                    'https://bf.dallemini.ai/generate',
+                    json={'prompt': shop.adress}
+                )
+                data = base64.b64decode(response.json()['images'][0])
+                shop.photo = ContentFile(data, name='hello.png')
+            shop.save()
             # caches['shop_cache'].clear()
             return redirect('main')
         context['form'] = ShopForm(request.POST)
@@ -164,6 +179,7 @@ class RegisterUser(CreateView):
     form_class = UserCreationForm
     template_name = "register.html"
     success_url = reverse_lazy("login")
+
     def form_valid(self, form):
         user = form.save()
         user.is_staff = True
@@ -174,6 +190,8 @@ class RegisterUser(CreateView):
         user.save()
         login(self.request, user)
         return redirect('catalog')
+
+
 class LoginUser(LoginView):
     form_class = AuthenticationForm
     template_name = "login.html"

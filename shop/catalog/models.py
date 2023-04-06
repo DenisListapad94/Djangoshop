@@ -43,7 +43,7 @@ class Shop(models.Model):
     adress = models.CharField(max_length=50, verbose_name='адрес')
     phone = models.CharField(max_length=50, verbose_name='телефон')
     balance = models.FloatField(verbose_name='баланс', default=100000)
-    photo = models.ImageField(upload_to='shop_photo', null=True)
+    photo = models.ImageField(upload_to='shop_photo', null=True, blank=True)
 
     orders = models.ForeignKey('Orders', on_delete=models.CASCADE, null=True)
     managers = models.ForeignKey('Managers', on_delete=models.CASCADE, null=True)
@@ -112,7 +112,7 @@ class Article(models.Model):
     serial_number = models.CharField(max_length=50, verbose_name='серийный номер')
 
     def __str__(self):
-        return self.article
+        return str(self.article)
 
     class Meta:
         verbose_name_plural = 'Артикль'

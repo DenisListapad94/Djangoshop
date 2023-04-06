@@ -33,7 +33,6 @@ class ClotheApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Clothes.objects.all()
     serializer_class = ClothesModelSerializer
 
-
 class BearerTokenAuthentication(TokenAuthentication):
     key = 'Bearer'
 class ShopApiView(generics.ListCreateAPIView):

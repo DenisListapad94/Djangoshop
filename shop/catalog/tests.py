@@ -1,3 +1,6 @@
+from base64 import b64encode
+from unittest.mock import patch, MagicMock
+
 from django.test import TestCase
 from django.test import Client
 import unittest
@@ -103,9 +106,16 @@ class TestShopUrl(TestCase):
         self.assertEqual(self.feedback._meta.get_field('rating').verbose_name, 'рейтинг')
         self.assertEqual(self.feedback._meta.get_field('rating').blank, False)
 
-    def test_add_shop_form(self):
+    @patch('catalog.views.requests')
+    def test_add_shop_form(self, fake_requests):
+        img_content = b'12345678'
+        fake_response = MagicMock()
+        fake_requests.post.return_value = fake_response
+        fake_response.json.return_value = {'images': [b64encode(img_content)]}
+
         adress = "Valensia"
         phone = '271812421'
+
         self.response = self.c.post('/goods/add_shop_form/', {
             'adress': adress,
             'phone': phone
@@ -115,3 +125,5 @@ class TestShopUrl(TestCase):
         self.assertEqual(len(shop), 1)
         self.assertEqual(shop[0].adress, adress)
         self.assertEqual(shop[0].phone, phone)
+        self.assertIsNotNone(shop[0].photo.url)
+        self.assertEqual(shop[0].photo.read(), img_content)
